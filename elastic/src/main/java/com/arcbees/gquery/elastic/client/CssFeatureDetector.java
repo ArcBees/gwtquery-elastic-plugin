@@ -19,6 +19,12 @@ package com.arcbees.gquery.elastic.client;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 
+/**
+ * The role of this class is to detect if the browser support css transform, translate3d and calc function.
+ * and to know how these features are supported : prefixed or not ?
+ * <p/>
+ * For instance, some browsers support translate3d but only if you prefix it : -webkit-translate3d
+ */
 public class CssFeatureDetector {
     /**
      * Implementation for ie6-8
