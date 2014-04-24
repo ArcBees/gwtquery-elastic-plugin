@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- aa -->
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.arcbees.gquery</groupId>
+        <artifactId>elastic-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <name>Elastic gQuery plugin example</name>
+    <artifactId>elastic-sample</artifactId>
+    <packaging>war</packaging>
+
+
+    <properties>
+        <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+    </properties>
+
+    <build>
+        <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <configuration>
+                    <module>com.arcbees.gquery.elastic.ElasticSample</module>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+
+            <!-- run 'mvn site' to upload -->
+            <!-- run 'mvn site -X' to debug and upload. -->
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+
+                <configuration>
+                    <outputDirectory>${webappDirectory}</outputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwt.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.gwtquery</groupId>
+            <artifactId>gwtquery</artifactId>
+            <version>${gquery.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.arcbees.gquery</groupId>
+            <artifactId>elastic</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>

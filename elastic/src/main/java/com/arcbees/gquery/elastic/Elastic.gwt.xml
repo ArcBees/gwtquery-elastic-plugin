@@ -1,0 +1,12 @@
+<module>
+    <inherits name='com.google.gwt.query.Query'/>
+
+    <replace-with class="com.arcbees.gquery.elastic.client.CssFeatureDetector.CssFeatureDetectorTrident">
+        <when-type-assignable class="com.arcbees.gquery.elastic.client.CssFeatureDetector"/>
+        <any>
+            <when-property-is name="user.agent" value="ie6"/>
+            <when-property-is name="user.agent" value="ie8"/>
+            <when-property-is name="user.agent" value="ie9"/>
+        </any>
+    </replace-with>
+</module>
