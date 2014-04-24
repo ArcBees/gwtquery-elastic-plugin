@@ -34,8 +34,8 @@ public class MutationObserver {
     protected static class NativeMutationObserver extends JavaScriptObject {
         static native NativeMutationObserver create(DomMutationCallback callback) /*-{
             return new MutationObserver(function (mutations) {
-                var mNum = mutations.length;
-                for (var i = 0; i < mNum; i++) {
+                var mutationsCount = mutations.length;
+                for (var i = 0; i < mutationsCount; i++) {
                     if (mutations[i].removedNodes.length) {
                         callback.@com.arcbees.gquery.elastic.client.MutationObserver.DomMutationCallback::onNodesRemoved(Lcom/google/gwt/core/client/JsArray;)(mutations[i].removedNodes);
                     }
@@ -75,7 +75,6 @@ public class MutationObserver {
     }
 
     private NativeMutationObserver mutator;
-
 
     public MutationObserver(DomMutationCallback callback) {
         mutator = NativeMutationObserver.create(callback);
