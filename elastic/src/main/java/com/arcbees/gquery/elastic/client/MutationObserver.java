@@ -88,5 +88,4 @@ public class MutationObserver {
     public void disconnect() {
         mutator.disconnect();
     }
-
 }
