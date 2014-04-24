@@ -21,13 +21,18 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.arcbees.gquery.elastic.client.MutationObserver.DomMutationCallback;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
@@ -59,7 +64,7 @@ public class ElasticImpl {
         @Override
         public boolean execute() {
             if (!canceled) {
-                update();
+                update(false);
             }
             return false;
         }
@@ -92,6 +97,7 @@ public class ElasticImpl {
     private double containerPaddingLeft;
     private double containerPaddingRight;
     private HandlerRegistration resizeHandlerRegistration;
+    private MutationObserver mutationObserver;
 
     public ElasticImpl(Element container, ElasticOption options) {
         this.container = container;
@@ -111,9 +117,16 @@ public class ElasticImpl {
             resizeHandlerRegistration.removeHandler();
             resizeHandlerRegistration = null;
         }
+
+        if (mutationObserver != null) {
+            mutationObserver.disconnect();
+            mutationObserver = null;
+        } else {
+            $(container).off("DOMNodeInserted DOMNodeRemoved");
+        }
     }
 
-    void update() {
+    void update(boolean fullUpdate) {
         int prevColumnNumber = columnHeights.size();
         columnHeights.clear();
         columnPriorities.clear();
@@ -141,8 +154,10 @@ public class ElasticImpl {
         }
 
         // Use four different loops in order to avoid browser reflows
-        for (Element e : items.elements()) {
-            initItem(e);
+        if (fullUpdate) {
+            for (Element e : items.elements()) {
+                initItem(e);
+            }
         }
 
         if (!useCalc || prevColumnNumber != colNumber) {
@@ -171,7 +186,7 @@ public class ElasticImpl {
             $container.css("position", "relative");
         }
 
-        update();
+        update(true);
 
         bind();
     }
@@ -370,15 +385,121 @@ public class ElasticImpl {
             resizeHandlerRegistration = Window.addResizeHandler(new ResizeHandler() {
                 @Override
                 public void onResize(ResizeEvent event) {
-                    onWindowResize();
+                    layout();
                 }
             });
         }
 
-        //TODO add DOM mutator
+        if (MutationObserver.isSupported()) {
+            mutationObserver = new MutationObserver(new DomMutationCallback() {
+                @Override
+                public void onNodesRemoved(JsArray<Node> removedNodes) {
+                    onItemsRemoved();
+                }
+
+                @Override
+                public void onNodesInserted(JsArray<Node> addedNodes, Node nextSibling) {
+                    onItemsInserted(toElementList(addedNodes));
+                }
+
+                @Override
+                public void onNodesAppended(JsArray<Node> addedNodes) {
+                    onItemsAppended(toElementList(addedNodes));
+                }
+            });
+
+            mutationObserver.observe(container);
+        } else {
+            // try old api with DomMutationEvent
+            $(container).on("DOMNodeInserted", new Function() {
+                @Override
+                public boolean f(Event event) {
+                    Node node = event.getEventTarget().cast();
+
+                    if (node.getNodeType() != Node.ELEMENT_NODE || node.getParentElement() != container) {
+                        return false;
+                    }
+
+                    final Element element = node.cast();
+                    Element prevSibling = element.getPreviousSiblingElement();
+                    Element nextSibling = element.getNextSiblingElement();
+
+                    if (prevSibling != null && getStyleInfo(prevSibling) != null
+                            && (nextSibling == null || getStyleInfo(nextSibling) == null)) {
+                        onItemsAppended(new ArrayList<Element>() {{
+                            this.add(element);
+                        }});
+                    } else {
+                        onItemsInserted(new ArrayList<Element>() {{
+                            this.add(element);
+                        }});
+                    }
+                    return false;
+                }
+            }).on("DOMNodeRemoved", new Function() {
+                @Override
+                public boolean f(Event event) {
+                    Node node = event.getEventTarget().cast();
+
+                    if (node.getNodeType() != Node.ELEMENT_NODE || node.getParentElement() != container) {
+                        return false;
+                    }
+
+                    onItemsRemoved();
+                    return false;
+                }
+            });
+        }
     }
 
-    private void onWindowResize() {
+    private void onItemsRemoved() {
+        layout();
+    }
+
+    private void onItemsInserted(List<Element> newItems) {
+        // use several loops in order to avoid browsers reflow
+        for (Element e : newItems) {
+            initItem(e);
+        }
+
+        for (Element e : newItems) {
+            setItemWidth(e, columnHeights.size());
+        }
+
+        layout();
+    }
+
+    private void onItemsAppended(List<Element> newItems) {
+        // use several loops in order to avoid browsers reflow
+        for (Element e : newItems) {
+            initItem(e);
+        }
+
+        for (Element e : newItems) {
+            setItemWidth(e, columnHeights.size());
+        }
+
+        for (Element e : newItems) {
+            placeItem(e, columnHeights.size());
+        }
+
+        setHeightContainer();
+    }
+
+    private List<Element> toElementList(JsArray<Node> nodes) {
+        List<Element> elements = new ArrayList<Element>();
+
+        for (int i = 0; i < nodes.length(); i++) {
+            Node n = nodes.get(i);
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                elements.add(n.<Element>cast());
+            }
+        }
+
+        return elements;
+    }
+
+    private void layout() {
         if (layoutCommand != null) {
             layoutCommand.cancel();
         }

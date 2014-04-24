@@ -66,7 +66,7 @@ public class Elastic extends GQuery {
         for (Element e : elements()) {
             ElasticImpl impl = getImpl(e);
             if (impl != null) {
-                impl.update();
+                impl.update(true);
             }
         }
         return this;
