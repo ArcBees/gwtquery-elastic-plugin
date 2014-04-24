@@ -26,13 +26,14 @@ public class Elastic extends GQuery {
             return new Elastic(gq);
         }
     });
+
     static String ELASTIC_DATA_KEY = "__GQUERY_ARCBEES_ELASTIC";
 
     public Elastic(GQuery gq) {
         super(gq);
     }
 
-    private static boolean isSupported() {
+    public static boolean isSupported() {
         return !GQuery.browser.ie6 && !GQuery.browser.ie8;
     }
 

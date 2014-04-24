@@ -17,7 +17,6 @@
 package com.arcbees.gquery.elastic.client;
 
 public class ElasticOption {
-
     private int columnWidth;
     private int minNumberColumn;
     private int maxNumberColumn;

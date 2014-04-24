@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- aa -->
 <project>
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -11,7 +10,6 @@
     <name>Elastic gQuery plugin example</name>
     <artifactId>elastic-sample</artifactId>
     <packaging>war</packaging>
-
 
     <properties>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>

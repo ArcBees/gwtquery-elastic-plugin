@@ -7,12 +7,10 @@ import static com.arcbees.gquery.elastic.client.Elastic.Elastic;
 import static com.google.gwt.query.client.GQuery.$;
 
 /**
- * Example code BasePlugin plugin for GwtQuery
+ * Example code for Elastic plugin for GwtQuery
  */
 public class ElasticSample implements EntryPoint {
-
     public void onModuleLoad() {
-
         $("#go").click(new Function() {
             @Override
             public void f() {
@@ -23,6 +21,5 @@ public class ElasticSample implements EntryPoint {
                 $("#container").as(Elastic).elastic(option);
             }
         });
-
     }
 }

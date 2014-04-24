@@ -78,11 +78,12 @@ public class ElasticImpl {
     private static final String CSS_CALC = CSS_FEATURE_DETECTOR.getPrefixedCalc();
 
     private final ElasticOption options;
+
     private Element container;
     private LayoutCommand layoutCommand;
     // Deque interface not supported by gwt
-    private LinkedList<Integer> columnPriority;
-    private List<Double> columnHeight;
+    private LinkedList<Integer> columnPriorities;
+    private List<Double> columnHeights;
     private boolean useTranslate3d;
     private boolean useCalc;
     private double columnWidth;
@@ -96,8 +97,8 @@ public class ElasticImpl {
         this.container = container;
         this.options = options;
 
-        columnHeight = new ArrayList<Double>();
-        columnPriority = new LinkedList<Integer>();
+        columnHeights = new ArrayList<Double>();
+        columnPriorities = new LinkedList<Integer>();
         useTranslate3d = CSS_TRANSLATE_3D != null;
         useCalc = CSS_CALC != null;
 
@@ -113,9 +114,9 @@ public class ElasticImpl {
     }
 
     void update() {
-        int prevColumnNumber = columnHeight.size();
-        columnHeight.clear();
-        columnPriority.clear();
+        int prevColumnNumber = columnHeights.size();
+        columnHeights.clear();
+        columnPriorities.clear();
 
         GQuery $container = $(container);
         // check if children returns text elements
@@ -135,8 +136,8 @@ public class ElasticImpl {
 
         double initialTop = useTranslate3d ? 0 : containerPaddingTop;
         for (int i = 0; i < colNumber; i++) {
-            columnHeight.add(initialTop);
-            columnPriority.add(i);
+            columnHeights.add(initialTop);
+            columnPriorities.add(i);
         }
 
         // Use four different loops in order to avoid browser reflows
@@ -153,6 +154,7 @@ public class ElasticImpl {
         for (Element e : items.elements()) {
             readItemHeight(e);
         }
+
         for (Element e : items.elements()) {
             placeItem(e, colNumber);
         }
@@ -176,7 +178,7 @@ public class ElasticImpl {
 
     private void setHeightContainer() {
         double top = useTranslate3d ? containerPaddingTop : 0;
-        double height = top + containerPaddingBottom + getMaxHeight(0, columnHeight.size());
+        double height = top + containerPaddingBottom + getMaxHeight(0, columnHeights.size());
         $(container).css("minHeight", height + "px");
     }
 
@@ -202,16 +204,16 @@ public class ElasticImpl {
 
         if (span == 1) {
             if (floatColumn == null) {
-                column = columnPriority.removeFirst();
+                column = columnPriorities.removeFirst();
             } else {
                 column = floatColumn;
-                columnPriority.remove((Integer) column);
+                columnPriorities.remove((Integer) column);
             }
-            minHeight = columnHeight.get(column);
+            minHeight = columnHeights.get(column);
         } else if (span >= numberOfCol) { // span all
             column = 0;
             minHeight = getMaxHeight(column, column + span);
-            columnPriority.clear();
+            columnPriorities.clear();
         } else {
             if (floatColumn != null) {
                 column = floatColumn;
@@ -219,7 +221,7 @@ public class ElasticImpl {
             } else {
                 minHeight = Double.MAX_VALUE;
                 column = 0;
-                for (int i = 0; i <= columnHeight.size() - span; i++) {
+                for (int i = 0; i <= columnHeights.size() - span; i++) {
                     double maxHeight = getMaxHeight(i, i + span);
                     if (maxHeight < minHeight) {
                         column = i;
@@ -228,7 +230,7 @@ public class ElasticImpl {
                 }
             }
 
-            for (Iterator<Integer> it = columnPriority.iterator(); it.hasNext(); ) {
+            for (Iterator<Integer> it = columnPriorities.iterator(); it.hasNext(); ) {
                 int c = it.next();
                 if (c >= column && c < column + span) {
                     it.remove();
@@ -259,17 +261,17 @@ public class ElasticImpl {
                 .marginTop + options.getInnerRowMargin();
 
         for (int i = column; i < column + span; i++) {
-            columnHeight.set(i, newHeight);
-            columnPriority.addLast(i);
+            columnHeights.set(i, newHeight);
+            columnPriorities.addLast(i);
         }
     }
 
     private double getMaxHeight(int start, int end) {
-        double maxHeight = columnHeight.get(start);
-        for (int j = start + 1; j < end; j++) {
-            double tmp = columnHeight.get(j);
-            if (tmp > maxHeight) {
-                maxHeight = tmp;
+        double maxHeight = columnHeights.get(start);
+        for (int i = start + 1; i < end; i++) {
+            double tmpHeight = columnHeights.get(i);
+            if (tmpHeight > maxHeight) {
+                maxHeight = tmpHeight;
             }
         }
         return maxHeight;
