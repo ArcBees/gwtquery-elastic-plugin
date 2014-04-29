@@ -52,11 +52,14 @@ public class WidgetSample implements EntryPoint {
             "tincidunt egestas odio. Sed a imperdiet magna, ut tempor arcu. Vivamus eu turpis neque. Phasellus eget " +
             "magna id augue cursus suscipit non vel dolor. Etiam sed posuere urna. Nulla a nibh sit amet lorem " +
             "molestie molestie sed sed eros. Donec gravida risus vel justo tincidunt ultricies.";
-    private final Random rand = new Random();
+
     @UiField
     ScrollPanel scrollPanel;
     @UiField
     ElasticHtmlPanel htmlPanel;
+
+    private final Random rand = new Random();
+
     private int lastScrollPosition;
     private int singleItemNumber;
     private int itemsCounter = 10;
