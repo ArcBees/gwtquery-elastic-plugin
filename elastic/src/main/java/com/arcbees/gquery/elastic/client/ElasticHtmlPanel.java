@@ -42,14 +42,6 @@ public class ElasticHtmlPanel extends HTMLPanel {
         return options;
     }
 
-    public void setOptions(ElasticOption options) {
-        this.options = options;
-
-        if (isAttached()) {
-            update();
-        }
-    }
-
     /**
      * Set the minimal width in px for a column and update the layout accordingly.
      * <p>
