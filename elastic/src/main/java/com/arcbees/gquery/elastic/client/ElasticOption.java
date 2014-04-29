@@ -17,7 +17,7 @@
 package com.arcbees.gquery.elastic.client;
 
 public class ElasticOption {
-    private int columnWidth;
+    private int minimumColumnWidth;
     private int minNumberColumn;
     private int maxNumberColumn;
     private int innerColumnMargin;
@@ -28,18 +28,47 @@ public class ElasticOption {
         setDefaults();
     }
 
-    public ElasticOption withColumWidth(int columnWidth) {
-        this.columnWidth = columnWidth;
+    /**
+     * Set the minimal width in px for a column.
+     * Default: 250
+     */
+    public ElasticOption setMinimumColumWidth(int columnWidth) {
+        this.minimumColumnWidth = columnWidth;
         return this;
+    }
+
+    public int getMinimumColumnWidth() {
+        return minimumColumnWidth;
+    }
+
+    public int getMinimalNumberOfColumn() {
+        return minNumberColumn;
     }
 
     /**
      * Set the minimal number of column to display.
      * Default: 1
      */
-    public ElasticOption withMinimalNumberOfColumn(int minNumberColumn) {
+    public ElasticOption setMinimalNumberOfColumn(int minNumberColumn) {
         this.minNumberColumn = minNumberColumn;
         return this;
+    }
+
+    public int getMaximalNumberOfColumn() {
+        return maxNumberColumn;
+    }
+
+    /**
+     * Set the maximum number of columns to display.
+     * Default: infinity
+     */
+    public ElasticOption setMaximalNumberOfColumn(int maxNumberColumn) {
+        this.maxNumberColumn = maxNumberColumn;
+        return this;
+    }
+
+    public int getInnerColumnMargin() {
+        return innerColumnMargin;
     }
 
     /**
@@ -47,9 +76,13 @@ public class ElasticOption {
      * just set padding on the items container.
      * Default: 10px
      */
-    public ElasticOption withInnerColumnMargin(int innerMargin) {
+    public ElasticOption setInnerColumnMargin(int innerMargin) {
         this.innerColumnMargin = innerMargin;
         return this;
+    }
+
+    public int getInnerRowMargin() {
+        return innerRowMargin;
     }
 
     /**
@@ -57,55 +90,26 @@ public class ElasticOption {
      * just set padding on the items container.
      * Default: 10px
      */
-    public ElasticOption withInnerRowMargin(int innerMargin) {
+    public ElasticOption setInnerRowMargin(int innerMargin) {
         this.innerRowMargin = innerColumnMargin;
         return this;
-    }
-
-    /**
-     * Set the maximum number of columns to display.
-     * Default: infinity
-     */
-    public ElasticOption withMaximalNumberOfColumn(int maxNumberColumn) {
-        this.maxNumberColumn = maxNumberColumn;
-        return this;
-    }
-
-    /**
-     * In autoResize mode, the plugin will automatically recompute the layout when the user is resizing the page.
-     * Default: true
-     */
-    public ElasticOption withAutoResize(boolean autoResize) {
-        this.autoResize = autoResize;
-        return this;
-    }
-
-    public int getColumnWidth() {
-        return columnWidth;
-    }
-
-    public int getMinimalNumberOfColumn() {
-        return minNumberColumn;
-    }
-
-    public int getMaximalNumberOfColumn() {
-        return maxNumberColumn;
-    }
-
-    public int getInnerColumnMargin() {
-        return innerColumnMargin;
-    }
-
-    public int getInnerRowMargin() {
-        return innerRowMargin;
     }
 
     public boolean isAutoResize() {
         return autoResize;
     }
 
+    /**
+     * In autoResize mode, the plugin will automatically recompute the layout when the user is resizing the page.
+     * Default: true
+     */
+    public ElasticOption setAutoResize(boolean autoResize) {
+        this.autoResize = autoResize;
+        return this;
+    }
+
     private void setDefaults() {
-        columnWidth = 250;
+        minimumColumnWidth = 250;
         minNumberColumn = 1;
         maxNumberColumn = Integer.MAX_VALUE;
         innerColumnMargin = 10;

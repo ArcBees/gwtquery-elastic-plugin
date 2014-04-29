@@ -1,0 +1,4 @@
+<module rename-to='ElasticWidgetSample'>
+    <inherits name='com.arcbees.gquery.elastic.Elastic'/>
+    <entry-point class='com.arcbees.gquery.elastic.widgetsample.client.WidgetSample'/>
+</module>

@@ -1,0 +1,7 @@
+<module rename-to='ElasticWidgetSample'>
+    <inherits name='com.arcbees.gquery.elastic.widgetsample.WidgetSample'/>
+
+    <add-linker name="xsiframe"/>
+    <set-configuration-property name="devModeRedirectEnabled" value="true"/>
+
+</module>

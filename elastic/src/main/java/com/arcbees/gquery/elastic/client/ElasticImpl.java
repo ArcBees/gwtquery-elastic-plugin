@@ -17,9 +17,9 @@
 package com.arcbees.gquery.elastic.client;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import com.arcbees.gquery.elastic.client.MutationObserver.DomMutationCallback;
 import com.google.gwt.core.client.GWT;
@@ -74,6 +74,19 @@ public class ElasticImpl {
         }
     }
 
+    private class ColumnHeightComparator implements Comparator<Integer> {
+        @Override
+        public int compare(Integer col1, Integer col2) {
+            int result = (int) (columnHeights.get(col1) - columnHeights.get(col2));
+
+            if (result == 0) {
+                return col1 - col2;
+            }
+
+            return result;
+        }
+    }
+
     private static final String STYLE_INFO_KEY = "__ELASTIC_STYLE_INFO";
     private static final String FIRST = "first";
     private static final String LAST = "last";
@@ -87,7 +100,7 @@ public class ElasticImpl {
     private Element container;
     private LayoutCommand layoutCommand;
     // Deque interface not supported by gwt
-    private LinkedList<Integer> columnPriorities;
+    private PriorityQueue<Integer> columnPriorities;
     private List<Double> columnHeights;
     private boolean useTranslate3d;
     private boolean useCalc;
@@ -104,7 +117,7 @@ public class ElasticImpl {
         this.options = options;
 
         columnHeights = new ArrayList<Double>();
-        columnPriorities = new LinkedList<Integer>();
+        columnPriorities = new PriorityQueue<Integer>(10, new ColumnHeightComparator());
         useTranslate3d = CSS_TRANSLATE_3D != null;
         useCalc = CSS_CALC != null;
 
@@ -145,7 +158,7 @@ public class ElasticImpl {
         int colNumber = calculateNumberOfColumn(totalColumnWidth);
 
         columnWidth = (totalColumnWidth - ((colNumber - 1) * options.getInnerColumnMargin())) / colNumber;
-        columnWidth = max(columnWidth, options.getColumnWidth());
+        columnWidth = max(columnWidth, options.getMinimumColumnWidth());
 
         double initialTop = useTranslate3d ? 0 : containerPaddingTop;
         for (int i = 0; i < colNumber; i++) {
@@ -219,10 +232,10 @@ public class ElasticImpl {
 
         if (span == 1) {
             if (floatColumn == null) {
-                column = columnPriorities.removeFirst();
+                column = columnPriorities.poll();
             } else {
                 column = floatColumn;
-                columnPriorities.remove((Integer) column);
+                columnPriorities.remove(column);
             }
             minHeight = columnHeights.get(column);
         } else if (span >= numberOfCol) { // span all
@@ -245,11 +258,8 @@ public class ElasticImpl {
                 }
             }
 
-            for (Iterator<Integer> it = columnPriorities.iterator(); it.hasNext(); ) {
-                int c = it.next();
-                if (c >= column && c < column + span) {
-                    it.remove();
-                }
+            for (int i = column; i < column + span; i++) {
+                columnPriorities.remove(i);
             }
         }
 
@@ -277,7 +287,7 @@ public class ElasticImpl {
 
         for (int i = column; i < column + span; i++) {
             columnHeights.set(i, newHeight);
-            columnPriorities.addLast(i);
+            columnPriorities.add(i);
         }
     }
 
@@ -294,7 +304,7 @@ public class ElasticImpl {
 
     private int calculateNumberOfColumn(double totalColumnWidth) {
         int innerMargin = options.getInnerColumnMargin();
-        int columnWidth = options.getColumnWidth();
+        int columnWidth = options.getMinimumColumnWidth();
 
         int columnNbr = (int) ((totalColumnWidth + innerMargin) / (columnWidth + innerMargin));
 
@@ -326,7 +336,7 @@ public class ElasticImpl {
         int span = getSpan(e);
         Integer floatColumn = null;
 
-        String floatValue = e.getAttribute("data-elastic-column");
+        String floatValue = e.getAttribute(Elastic.COLUMN_ATTRIBUTE);
         if (FIRST.equalsIgnoreCase(floatValue)) {
             floatColumn = 0;
         } else if (LAST.equalsIgnoreCase(floatValue)) {
@@ -364,7 +374,7 @@ public class ElasticImpl {
     }
 
     private int getSpan(Element element) {
-        String attributeValue = element.getAttribute("data-elastic-span");
+        String attributeValue = element.getAttribute(Elastic.SPAN_ATTRIBUTE);
 
         if (attributeValue != null && !attributeValue.isEmpty()) {
             if ("all".equals(attributeValue)) {
@@ -381,14 +391,14 @@ public class ElasticImpl {
     }
 
     private void bind() {
-        if (options.isAutoResize()) {
-            resizeHandlerRegistration = Window.addResizeHandler(new ResizeHandler() {
-                @Override
+        resizeHandlerRegistration = Window.addResizeHandler(new ResizeHandler() {
+            @Override
                 public void onResize(ResizeEvent event) {
+                if (options.isAutoResize()) {
                     layout();
                 }
+            }
             });
-        }
 
         if (MutationObserver.isSupported()) {
             mutationObserver = new MutationObserver(new DomMutationCallback() {
@@ -477,6 +487,10 @@ public class ElasticImpl {
 
         for (Element e : newItems) {
             setItemWidth(e, columnHeights.size());
+        }
+
+        for (Element e : newItems) {
+            readItemHeight(e);
         }
 
         for (Element e : newItems) {
