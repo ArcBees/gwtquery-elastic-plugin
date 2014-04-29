@@ -2,4 +2,3 @@
     <inherits name='com.arcbees.gquery.elastic.Elastic'/>
     <entry-point class='com.arcbees.gquery.elastic.basicsample.client.ElasticSample'/>
 </module>
-    
