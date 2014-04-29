@@ -77,10 +77,10 @@ public class ElasticImpl {
     private class ColumnHeightComparator implements Comparator<Integer> {
         @Override
         public int compare(Integer col1, Integer col2) {
-            int result = (int) (columnHeights.get(col1) - columnHeights.get(col2));
+            int result = Double.compare(columnHeights.get(col1),  columnHeights.get(col2));
 
             if (result == 0) {
-                return col1 - col2;
+                return Integer.compare(col1, col2);
             }
 
             return result;

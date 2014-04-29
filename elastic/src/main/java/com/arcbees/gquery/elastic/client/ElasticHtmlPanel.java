@@ -52,7 +52,8 @@ public class ElasticHtmlPanel extends HTMLPanel {
 
     /**
      * Set the minimal width in px for a column and update the layout accordingly.
-     * Default: 250
+     * <p>
+     * Default: {@value com.arcbees.gquery.elastic.client.ElasticOption#MINIMUM_COLUMN_WIDTH_DEFAULT}
      */
     public void setMinimumColumnWidth(int columnWidth) {
         setMinimumColumnWidth(columnWidth, true);
@@ -61,7 +62,8 @@ public class ElasticHtmlPanel extends HTMLPanel {
     /**
      * Set the minimal width in px for a column and update the layout if <code>updateLayout</code> equals to
      * <code>true</code>
-     * Default: 250
+     * <p>
+     * Default: {@value com.arcbees.gquery.elastic.client.ElasticOption#MINIMUM_COLUMN_WIDTH_DEFAULT}
      */
     public void setMinimumColumnWidth(int columnWidth, boolean updateLayout) {
         options.setMinimumColumWidth(columnWidth);
@@ -72,17 +74,19 @@ public class ElasticHtmlPanel extends HTMLPanel {
     }
 
     /**
-     * Set the minimal number of column to display and update the layout accordingly.
-     * Default: 1
+     * Set the minimal number of columns to display and update the layout accordingly.
+     * <p>
+     * Default: {@value com.arcbees.gquery.elastic.client.ElasticOption#MINIMUM_COLUMN_DEFAULT}
      */
     public void setMinimalNumberOfColumn(int minNumberColumn) {
         setMinimalNumberOfColumn(minNumberColumn, true);
     }
 
     /**
-     * Set the minimal number of column to display and update the layout if <code>updateLayout</code> equals to
+     * Set the minimal number of columns to display and update the layout if <code>updateLayout</code> equals to
      * <code>true</code>
-     * Default: 1
+     * <p>
+     * Default: {@value com.arcbees.gquery.elastic.client.ElasticOption#MINIMUM_COLUMN_DEFAULT}
      */
     public void setMinimalNumberOfColumn(int minNumberColumn, boolean updateLayout) {
         options.setMinimalNumberOfColumn(minNumberColumn);
@@ -94,7 +98,8 @@ public class ElasticHtmlPanel extends HTMLPanel {
 
     /**
      * Set the maximum number of columns to display and update the layout accordingly.
-     * Default: infinity
+     * <p>
+     * Default: {@value java.lang.Integer#MAX_VALUE}
      */
     public void setMaximalNumberOfColumn(int maxNumberColumn) {
         setMaximalNumberOfColumn(maxNumberColumn, true);
@@ -103,7 +108,8 @@ public class ElasticHtmlPanel extends HTMLPanel {
     /**
      * Set the maximum number of columns to display and update the layout if <code>updateLayout</code> equals to
      * <code>true</code>
-     * Default: infinity
+     * <p>
+     * Default: {@value java.lang.Integer#MAX_VALUE}
      */
     public void setMaximalNumberOfColumn(int maxNumberColumn, boolean updateLayout) {
         options.setMaximalNumberOfColumn(maxNumberColumn);
@@ -114,18 +120,20 @@ public class ElasticHtmlPanel extends HTMLPanel {
     }
 
     /**
-     * Set the space between each columns in px and update the layout accordingly. If you want to set outer margin,
+     * Set the space between each column in px and update the layout accordingly. If you want to set outer margin,
      * just set padding on the items container.
-     * Default: 10px
+     * <p>
+     * Default: {@value com.arcbees.gquery.elastic.client.ElasticOption#INNER_COLUMN_MARGIN_DEFAULT}
      */
     public void setInnerColumnMargin(int innerMargin) {
         setInnerColumnMargin(innerMargin, true);
     }
 
     /**
-     * Set the space between each columns in px and update the layout if <code>updateLayout</code> equals to
+     * Set the space between each column in px and update the layout if <code>updateLayout</code> equals to
      * <code>true</code> If you want to set outer margin, just set padding on the items container.
-     * Default: 10px
+     * <p>
+     * Default: {@value com.arcbees.gquery.elastic.client.ElasticOption#INNER_COLUMN_MARGIN_DEFAULT}
      */
     public void setInnerColumnMargin(int innerMargin, boolean updateLayout) {
         options.setInnerColumnMargin(innerMargin);
@@ -136,18 +144,20 @@ public class ElasticHtmlPanel extends HTMLPanel {
     }
 
     /**
-     * Set the space between each rows in px and update the layout accordingly. If you want to set outer margin,
+     * Set the space between each row in px and update the layout accordingly. If you want to set outer margin,
      * just set padding on the items container.
-     * Default: 10px
+     * <p>
+     * Default: {@value com.arcbees.gquery.elastic.client.ElasticOption#INNER_ROW_MARGIN_DEFAULT}
      */
     public void setInnerRowMargin(int innerMargin) {
         setInnerRowMargin(innerMargin, true);
     }
 
     /**
-     * Set the space between each rows in px and update the layout if <code>updateLayout</code> equals to
+     * Set the space between each row in px and update the layout if <code>updateLayout</code> equals to
      * <code>true</code> If you want to set outer margin, just set padding on the items container.
-     * Default: 10px
+     * <p>
+     * Default: {@value com.arcbees.gquery.elastic.client.ElasticOption#INNER_ROW_MARGIN_DEFAULT}
      */
     public void setInnerRowMargin(int innerMargin, boolean updateLayout) {
         options.setInnerRowMargin(innerMargin);
@@ -159,6 +169,7 @@ public class ElasticHtmlPanel extends HTMLPanel {
 
     /**
      * In autoResize mode, the plugin will automatically recompute the layout when the user is resizing the page.
+     * <p>
      * Default: true
      */
     public void setAutoResize(boolean autoResize) {
@@ -173,7 +184,7 @@ public class ElasticHtmlPanel extends HTMLPanel {
 
     @Override
     protected void onLoad() {
-        // we need to be sure that all style are injected into the dom before to call the plugin
+        // we need to be sure that all styles are injected into the dom before calling the plugin
         Scheduler.get().scheduleDeferred(new Command() {
             @Override
             public void execute() {

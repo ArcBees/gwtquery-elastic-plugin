@@ -17,6 +17,11 @@
 package com.arcbees.gquery.elastic.client;
 
 public class ElasticOption {
+    static int MINIMUM_COLUMN_DEFAULT = 1;
+    static int MINIMUM_COLUMN_WIDTH_DEFAULT = 250;
+    static int INNER_COLUMN_MARGIN_DEFAULT = 10;
+    static int INNER_ROW_MARGIN_DEFAULT = 10;
+
     private int minimumColumnWidth;
     private int minNumberColumn;
     private int maxNumberColumn;
@@ -30,7 +35,7 @@ public class ElasticOption {
 
     /**
      * Set the minimal width in px for a column.
-     * Default: 250
+     * Default: {@value #MINIMUM_COLUMN_WIDTH_DEFAULT}
      */
     public ElasticOption setMinimumColumWidth(int columnWidth) {
         this.minimumColumnWidth = columnWidth;
@@ -46,8 +51,8 @@ public class ElasticOption {
     }
 
     /**
-     * Set the minimal number of column to display.
-     * Default: 1
+     * Set the minimal number of columns to display.
+     * Default: {@value #MINIMUM_COLUMN_DEFAULT}
      */
     public ElasticOption setMinimalNumberOfColumn(int minNumberColumn) {
         this.minNumberColumn = minNumberColumn;
@@ -60,7 +65,7 @@ public class ElasticOption {
 
     /**
      * Set the maximum number of columns to display.
-     * Default: infinity
+     * Default: {@value java.lang.Integer#MAX_VALUE}
      */
     public ElasticOption setMaximalNumberOfColumn(int maxNumberColumn) {
         this.maxNumberColumn = maxNumberColumn;
@@ -74,7 +79,7 @@ public class ElasticOption {
     /**
      * Set the space between each columns in px. If you want to set outer margin,
      * just set padding on the items container.
-     * Default: 10px
+     * Default: {@value #INNER_COLUMN_MARGIN_DEFAULT}
      */
     public ElasticOption setInnerColumnMargin(int innerMargin) {
         this.innerColumnMargin = innerMargin;
@@ -88,7 +93,7 @@ public class ElasticOption {
     /**
      * Set the space between each rows in px. If you want to set outer margin,
      * just set padding on the items container.
-     * Default: 10px
+     * Default: {@value #INNER_ROW_MARGIN_DEFAULT}
      */
     public ElasticOption setInnerRowMargin(int innerMargin) {
         this.innerRowMargin = innerColumnMargin;
@@ -109,11 +114,11 @@ public class ElasticOption {
     }
 
     private void setDefaults() {
-        minimumColumnWidth = 250;
-        minNumberColumn = 1;
+        minimumColumnWidth = MINIMUM_COLUMN_WIDTH_DEFAULT;
+        minNumberColumn = MINIMUM_COLUMN_DEFAULT;
         maxNumberColumn = Integer.MAX_VALUE;
-        innerColumnMargin = 10;
-        innerRowMargin = 10;
+        innerColumnMargin = INNER_COLUMN_MARGIN_DEFAULT;
+        innerRowMargin = INNER_ROW_MARGIN_DEFAULT;
         autoResize = true;
     }
 }
