@@ -127,7 +127,6 @@
                     <mode>htmlunit</mode>
                     <testTimeOut>180</testTimeOut>
                     <style>${gwt.style}</style>
-                    <module>com.arcbees.gquery.elastic.Elastic</module>
                 </configuration>
                 <executions>
                     <execution>

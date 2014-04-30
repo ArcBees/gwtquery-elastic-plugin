@@ -17,7 +17,12 @@
 package com.arcbees.gquery.elastic.client;
 
 public class ElasticOption {
-    private int columnWidth;
+    static int MINIMUM_COLUMN_DEFAULT = 1;
+    static int MINIMUM_COLUMN_WIDTH_DEFAULT = 250;
+    static int INNER_COLUMN_MARGIN_DEFAULT = 10;
+    static int INNER_ROW_MARGIN_DEFAULT = 10;
+
+    private int minimumColumnWidth;
     private int minNumberColumn;
     private int maxNumberColumn;
     private int innerColumnMargin;
@@ -28,88 +33,92 @@ public class ElasticOption {
         setDefaults();
     }
 
-    public ElasticOption withColumWidth(int columnWidth) {
-        this.columnWidth = columnWidth;
-        return this;
-    }
-
     /**
-     * Set the minimal number of column to display.
-     * Default: 1
+     * Set the minimal width in px for a column.
+     * Default: {@value #MINIMUM_COLUMN_WIDTH_DEFAULT}
      */
-    public ElasticOption withMinimalNumberOfColumn(int minNumberColumn) {
-        this.minNumberColumn = minNumberColumn;
+    public ElasticOption setMinimumColumWidth(int columnWidth) {
+        this.minimumColumnWidth = columnWidth;
         return this;
     }
 
-    /**
-     * Set the space between each columns in px. If you want to set outer margin,
-     * just set padding on the items container.
-     * Default: 10px
-     */
-    public ElasticOption withInnerColumnMargin(int innerMargin) {
-        this.innerColumnMargin = innerMargin;
-        return this;
-    }
-
-    /**
-     * Set the space between each rows in px. If you want to set outer margin,
-     * just set padding on the items container.
-     * Default: 10px
-     */
-    public ElasticOption withInnerRowMargin(int innerMargin) {
-        this.innerRowMargin = innerColumnMargin;
-        return this;
-    }
-
-    /**
-     * Set the maximum number of columns to display.
-     * Default: infinity
-     */
-    public ElasticOption withMaximalNumberOfColumn(int maxNumberColumn) {
-        this.maxNumberColumn = maxNumberColumn;
-        return this;
-    }
-
-    /**
-     * In autoResize mode, the plugin will automatically recompute the layout when the user is resizing the page.
-     * Default: true
-     */
-    public ElasticOption withAutoResize(boolean autoResize) {
-        this.autoResize = autoResize;
-        return this;
-    }
-
-    public int getColumnWidth() {
-        return columnWidth;
+    public int getMinimumColumnWidth() {
+        return minimumColumnWidth;
     }
 
     public int getMinimalNumberOfColumn() {
         return minNumberColumn;
     }
 
+    /**
+     * Set the minimal number of columns to display.
+     * Default: {@value #MINIMUM_COLUMN_DEFAULT}
+     */
+    public ElasticOption setMinimalNumberOfColumn(int minNumberColumn) {
+        this.minNumberColumn = minNumberColumn;
+        return this;
+    }
+
     public int getMaximalNumberOfColumn() {
         return maxNumberColumn;
+    }
+
+    /**
+     * Set the maximum number of columns to display.
+     * Default: {@value java.lang.Integer#MAX_VALUE}
+     */
+    public ElasticOption setMaximalNumberOfColumn(int maxNumberColumn) {
+        this.maxNumberColumn = maxNumberColumn;
+        return this;
     }
 
     public int getInnerColumnMargin() {
         return innerColumnMargin;
     }
 
+    /**
+     * Set the space between each columns in px. If you want to set outer margin,
+     * just set padding on the items container.
+     * Default: {@value #INNER_COLUMN_MARGIN_DEFAULT}
+     */
+    public ElasticOption setInnerColumnMargin(int innerMargin) {
+        this.innerColumnMargin = innerMargin;
+        return this;
+    }
+
     public int getInnerRowMargin() {
         return innerRowMargin;
+    }
+
+    /**
+     * Set the space between each rows in px. If you want to set outer margin,
+     * just set padding on the items container.
+     * Default: {@value #INNER_ROW_MARGIN_DEFAULT}
+     */
+    public ElasticOption setInnerRowMargin(int innerMargin) {
+        this.innerRowMargin = innerColumnMargin;
+        return this;
     }
 
     public boolean isAutoResize() {
         return autoResize;
     }
 
+    /**
+     * In autoResize mode, the plugin will automatically recompute the layout when the user is resizing the page.
+     * Default: true
+     */
+    public ElasticOption setAutoResize(boolean autoResize) {
+        this.autoResize = autoResize;
+        return this;
+    }
+
     private void setDefaults() {
-        columnWidth = 250;
-        minNumberColumn = 1;
+        minimumColumnWidth = MINIMUM_COLUMN_WIDTH_DEFAULT;
+        minNumberColumn = MINIMUM_COLUMN_DEFAULT;
         maxNumberColumn = Integer.MAX_VALUE;
-        innerColumnMargin = 10;
-        innerRowMargin = 10;
+        innerColumnMargin = INNER_COLUMN_MARGIN_DEFAULT;
+        innerRowMargin = INNER_ROW_MARGIN_DEFAULT;
         autoResize = true;
     }
 }

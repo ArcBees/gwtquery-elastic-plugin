@@ -27,6 +27,9 @@ public class Elastic extends GQuery {
         }
     });
 
+    public static String COLUMN_ATTRIBUTE = "data-elastic-column";
+    public static String SPAN_ATTRIBUTE = "data-elastic-span";
+
     static String ELASTIC_DATA_KEY = "__GQUERY_ARCBEES_ELASTIC";
 
     public Elastic(GQuery gq) {
