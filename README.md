@@ -1,7 +1,7 @@
 #GQuery Elastic Plugin
 
 ##Description of the plugin
-Elastic plugin take the children of an element and rearrange them in a grid layout (like google+ or pinterest)
+Elastic plugin takes the children of an element and rearranges them in a grid layout (like google+ or pinterest)
 
 ##Examples
 Check these 2 examples:
