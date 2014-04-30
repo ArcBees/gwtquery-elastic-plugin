@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.arcbees.gquery.elastic.basicsample.client;
+package com.arcbees.gquery.elastic.htmlsample.client;
 
 import com.arcbees.gquery.elastic.client.ElasticOption;
 import com.google.gwt.core.client.EntryPoint;
