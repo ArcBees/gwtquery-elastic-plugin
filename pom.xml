@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
+    <groupId>com.arcbees.gquery</groupId>
+    <artifactId>elastic-plugin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>elastic</module>
+        <module>elastic-sample</module>
+    </modules>
+
+    <name>ArcBees GQuery Elastic Plugins</name>
+    <description>Arcbees GQuery Elastic Plugin</description>
+    <url>https://github.com/ArcBees/gwtquery-elastic-plugin</url>
+    <inceptionYear>2014</inceptionYear>
+
+    <organization>
+        <name>ArcBees</name>
+        <url>http://arcbees.com</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>jDramaix</id>
+            <name>Julien Dramaix</name>
+            <email>julien.dramaix@gmail.com</email>
+            <organization>ArcBees</organization>
+            <organizationUrl>http://arcbees.com</organizationUrl>
+            <roles>
+                <role>Lead developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/ArcBees/gwtquery-elastic-plugin.git</connection>
+        <developerConnection>scm:git:https://github.com/ArcBees/gwtquery-elastic-plugin.git</developerConnection>
+        <url>https://github.com/ArcBees/gwtquery-elastic-plugin</url>
+    </scm>
+
+    <issueManagement>
+        <system>Github Issues</system>
+        <url>https://github.com/ArcBees/gwtquery-elastic-plugin/issues</url>
+    </issueManagement>
+
+    <properties>
+        <!-- client -->
+        <gquery.version>1.4.2-SNAPSHOT</gquery.version>
+        <gwt.version>2.6.0</gwt.version>
+        <gwt.style>OBF</gwt.style>
+        <junit.version>4.11</junit.version>
+
+        <gwt.maven.version>2.6.0</gwt.maven.version>
+        <maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
+        <github.version>0.9</github.version>
+
+        <!-- maven -->
+        <target.jdk>1.6</target.jdk>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <source>${target.jdk}</source>
+                    <target>${target.jdk}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*GwtTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <arguments>-Psonatype-oss-release -Prelease -Dgpg.passphrase=${gpg.passphrase}</arguments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwt.maven.version}</version>
+                <configuration>
+                    <hostedWebapp>${webappDirectory}</hostedWebapp>
+                    <copyWebapp>true</copyWebapp>
+                    <extraJvmArgs>-Xss1024k -Xmx1024m -XX:MaxPermSize=256m</extraJvmArgs>
+                    <includes>**/*GwtTest.java</includes>
+                    <mode>htmlunit</mode>
+                    <testTimeOut>180</testTimeOut>
+                    <style>${gwt.style}</style>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>${github.version}</version>
+                <configuration>
+                    <!-- <dryRun>true</dryRun> -->
+                    <message>Creating site for ${project.version}</message>
+                    <!-- github > sets the ~/.m2/setting.xml server id profile -->
+                    <server>github</server>
+                    <excludes>
+                        <exclude>*.DS_Store</exclude>
+                        <exclude>*.sh</exclude>
+                        <exclude>options</exclude>
+                        <exclude>packages</exclude>
+                        <exclude>WEB-INF/**</exclude>
+                        <exclude>META-INF/**</exclude>
+                    </excludes>
+                    <force>true</force>
+                    <merge>true</merge>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.gwtquery</groupId>
+            <artifactId>gwtquery</artifactId>
+            <version>${gquery.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwt.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-dev</artifactId>
+            <version>${gwt.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
