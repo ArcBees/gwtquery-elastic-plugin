@@ -32,7 +32,7 @@ public class ElasticSample implements EntryPoint {
             @Override
             public void f() {
                 ElasticOption option = new ElasticOption()
-                        .setMinimumColumWidth(400)
+                        .setMinimumColumWidth(275)
                         .setMinimalNumberOfColumn(2);
 
                 $("#container").as(Elastic).elastic(option);

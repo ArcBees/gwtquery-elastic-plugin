@@ -17,6 +17,9 @@
     <script language="javascript" src="ElasticBasicSample.nocache.js"></script>
 </head>
 <body>
+<p>
+    Click on the button to run the plugin. Then resize the window to see how the plugin recomputes the layout.
+</p>
 <button id="go">Elastic</button>
 <div id="container">
 <div data-elastic-span="all"><h3>data-elastic-span="all"</h3>1. Lorem ipsum dolor sit amet, consectetur adipisicing
@@ -230,5 +233,17 @@
     laborum
 </div>
 </div>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-43120417-20', 'auto', {'allowLinker': true});
+    ga('require', 'linker');
+    ga('linker:autoLink', ['github.com'] );
+    ga('send', 'pageview');
+
+</script>
 </body>
 </html>
