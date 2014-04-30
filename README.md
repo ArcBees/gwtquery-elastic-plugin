@@ -23,7 +23,7 @@ To call the plugin:
             $("#container").as(Elastic).elastic(option);
 ```
 
-or you can use an ``ElasticHtmlPanel``` and all direct children of the panel (html elements or widgets) will be rearranged in column.
+or you can use an `ElasticHtmlPanel` and all direct children of the panel (html elements or widgets) will be rearranged in column.
 
 
 
@@ -39,7 +39,7 @@ number of column to display. (default: 250px)
 * _InnerRowMargin_: Specify the space between each row (default: 10px)
 *_autoResize_: Specify if we have to recalculate the layout after a window resizing. (default: true)
 
-To specify this option, you can use an ```ElasticOption``` object and pass it to the plugin or uses the specific method directly on the ElasticHtmlPanel
+To specify this option, you can use an `ElasticOption` object and pass it to the plugin or uses the specific method directly on the ElasticHtmlPanel
 
 On each child we can specify the following attributes:
 *_data-elastic-span_: specify the number of column to span for this child.
@@ -55,7 +55,7 @@ There is no official release yet, but you can already use a snapshot version
         <artifactId>elastic</artifactId>
         <version>1.0-SNAPSHOT</version>
     </dependency>
-``
+```
 
 
 ##Thanks to
