@@ -24,7 +24,7 @@
                 <artifactId>gwt-maven-plugin</artifactId>
                 <configuration>
                     <modules>
-                        <module>com.arcbees.gquery.elastic.basicsample.ElasticSample</module>
+                        <module>com.arcbees.gquery.elastic.htmlsample.ElasticSample</module>
                         <module>com.arcbees.gquery.elastic.widgetsample.WidgetSample</module>
                     </modules>
                 </configuration>
