@@ -1,4 +1,4 @@
-package com.arcbees.gquery.elastic.basicsample.client;
+package com.arcbees.gquery.elastic.client;
 
 import com.google.gwt.junit.client.GWTTestCase;
 
