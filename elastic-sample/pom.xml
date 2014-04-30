@@ -23,7 +23,10 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
                 <configuration>
-                    <module>com.arcbees.gquery.elastic.ElasticSample</module>
+                    <modules>
+                        <module>com.arcbees.gquery.elastic.htmlsample.ElasticSample</module>
+                        <module>com.arcbees.gquery.elastic.widgetsample.WidgetSample</module>
+                    </modules>
                 </configuration>
             </plugin>
 
