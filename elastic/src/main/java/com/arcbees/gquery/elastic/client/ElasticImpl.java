@@ -99,7 +99,7 @@ public class ElasticImpl {
 
     private Element container;
     private LayoutCommand layoutCommand;
-    // Deque interface not supported by gwt
+    // Deque interfaces not supported by gwt
     private PriorityQueue<Integer> columnPriorities;
     private List<Double> columnHeights;
     private boolean useTranslate3d;
