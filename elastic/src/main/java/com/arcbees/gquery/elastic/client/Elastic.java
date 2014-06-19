@@ -47,7 +47,7 @@ public class Elastic extends GQuery {
     public Elastic elastic(ElasticOption options) {
         for (Element e : elements()) {
             GQuery $e = $(e);
-            if (isSupported() && $e.data(ELASTIC_DATA_KEY) == null) {
+            if (isSupported() && getImpl(e) == null) {
                 ElasticImpl impl = new ElasticImpl(e, options);
                 $e.data(ELASTIC_DATA_KEY, impl);
             }
@@ -60,6 +60,7 @@ public class Elastic extends GQuery {
             ElasticImpl impl = getImpl(e);
             if (impl != null) {
                 impl.destroy();
+                $(e).removeData(ELASTIC_DATA_KEY);
             }
         }
         return this;
