@@ -62,5 +62,3 @@ There is no official release yet, but you can already use a snapshot version
 [![Arcbees.com](http://arcbees-ads.appspot.com/ad.png)](http://arcbees.com)
 
 [![IntelliJ](https://lh6.googleusercontent.com/--QIIJfKrjSk/UJJ6X-UohII/AAAAAAAAAVM/cOW7EjnH778/s800/banner_IDEA.png)](http://www.jetbrains.com/idea/index.html)
-
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/361ac462e4947df21a821a3fbbbc3367 "githalytics.com")](http://githalytics.com/ArcBees/gwtquery-elastic-plugin)
