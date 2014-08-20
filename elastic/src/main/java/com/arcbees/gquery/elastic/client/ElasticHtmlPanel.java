@@ -66,6 +66,44 @@ public class ElasticHtmlPanel extends HTMLPanel {
     }
 
     /**
+     * Set the maximal width in px for a column and update the layout accordingly. When the column width reach this value, the width of the column is not
+     * increased even if the width od the container increase.
+     * <p/>
+     * If you want to the width of the columns doesn't increase with the width of the container, set the
+     * <code>maximumWidth</code> equals to the <code>minimumWidth</code>
+     * <p/>
+     * If you want that the columns take all the available space in the container et increase their width according to
+     * the width of the container, set the <code>maximumWidth</code> to -1.
+     * <p/>
+     * Default: {@value -1}
+     */
+    public void setMaximumColumnWidth(int maximumColumnWidth) {
+        setMaximumColumnWidth(maximumColumnWidth, true);
+    }
+
+
+    /**
+     * Set the maximal width in px for a column. When the column width reach this value, the width of the column is not
+     * increased even if the width od the container increase. The layout is updated if <code>updateLayout</code> equals
+     * to <code>true</code>
+     * <p/>
+     * If you want to the width of the columns doesn't increase with the width of the container, set the
+     * <code>maximumWidth</code> equals to the <code>minimumWidth</code>
+     * <p/>
+     * If you want that the columns take all the available space in the container et increase their width according to
+     * the width of the container, set the <code>maximumWidth</code> to -1.
+     * <p/>
+     * Default: {@value -1}
+     */
+    public void setMaximumColumnWidth(int maximumColumnWidth, boolean updateLayout) {
+        options.setMaximumColumnWidth(maximumColumnWidth);
+
+        if (updateLayout) {
+            update();
+        }
+    }
+
+    /**
      * Set the minimal number of columns to display and update the layout accordingly.
      * <p>
      * Default: {@value com.arcbees.gquery.elastic.client.ElasticOption#MINIMUM_COLUMN_DEFAULT}
