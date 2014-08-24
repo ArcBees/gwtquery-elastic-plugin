@@ -16,11 +16,6 @@
 
 package com.arcbees.gquery.elastic.client;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
-
 import com.arcbees.gquery.elastic.client.MutationObserver.DomMutationCallback;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
@@ -36,10 +31,14 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
 
 import static com.google.gwt.query.client.GQuery.$;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 public class ElasticImpl {
     /**
@@ -56,6 +55,7 @@ public class ElasticImpl {
         int height;
         double width;
         Integer floatColumn;
+        boolean rowSpanAll;
     }
 
     private class LayoutCommand implements RepeatingCommand {
@@ -102,6 +102,7 @@ public class ElasticImpl {
     // Deque interfaces not supported by gwt
     private PriorityQueue<Integer> columnPriorities;
     private List<Double> columnHeights;
+    private List<Boolean> ignoredColumn;
     private boolean useTranslate3d;
     private boolean useCalc;
     private double columnWidth;
@@ -117,6 +118,7 @@ public class ElasticImpl {
         this.options = options;
 
         columnHeights = new ArrayList<Double>();
+        ignoredColumn = new ArrayList<Boolean>();
         columnPriorities = new PriorityQueue<Integer>(10, new ColumnHeightComparator());
         useTranslate3d = CSS_TRANSLATE_3D != null;
         useCalc = CSS_CALC != null;
@@ -143,6 +145,7 @@ public class ElasticImpl {
         int prevColumnNumber = columnHeights.size();
         columnHeights.clear();
         columnPriorities.clear();
+        ignoredColumn.clear();
 
         GQuery $container = $(container);
         // check if children returns text elements
@@ -159,11 +162,16 @@ public class ElasticImpl {
 
         columnWidth = (totalColumnWidth - ((colNumber - 1) * options.getInnerColumnMargin())) / colNumber;
         columnWidth = max(columnWidth, options.getMinimumColumnWidth());
+        if (options.getMaximumColumnWidth() != -1) {
+            int maxWidth = max(options.getMinimumColumnWidth(), options.getMaximumColumnWidth());
+            columnWidth = min(columnWidth, maxWidth);
+        }
 
         double initialTop = useTranslate3d ? 0 : containerPaddingTop;
         for (int i = 0; i < colNumber; i++) {
             columnHeights.add(initialTop);
             columnPriorities.add(i);
+            ignoredColumn.add(false);
         }
 
         // Use four different loops in order to avoid browser reflows
@@ -173,7 +181,7 @@ public class ElasticImpl {
             }
         }
 
-        if (!useCalc || prevColumnNumber != colNumber) {
+        if (!canUseCalc() || prevColumnNumber != colNumber) {
             for (Element e : items.elements()) {
                 setItemWidth(e, colNumber);
             }
@@ -188,6 +196,10 @@ public class ElasticImpl {
         }
 
         setHeightContainer();
+    }
+
+    private boolean canUseCalc() {
+        return useCalc && options.getMaximumColumnWidth() == -1;
     }
 
     private void init() {
@@ -265,7 +277,7 @@ public class ElasticImpl {
 
         if (useTranslate3d) {
             String translate3d;
-            if (useCalc) {
+            if (canUseCalc()) {
                 double weight = (double) column / span;
                 String offset = (100 * weight) + "%" +
                         " + " + ((si.marginLeft + si.marginRight) * weight + options.getInnerColumnMargin() * column)
@@ -283,11 +295,17 @@ public class ElasticImpl {
         }
 
         double newHeight = minHeight + si.height + si.borderTopWidth + si.borderBottomWidth + si.marginBottom + si
-                .marginTop + options.getInnerRowMargin();
+                    .marginTop + options.getInnerRowMargin();
 
         for (int i = column; i < column + span; i++) {
             columnHeights.set(i, newHeight);
-            columnPriorities.add(i);
+            if (si.rowSpanAll) {
+                ignoredColumn.set(i, true);
+            }
+
+            if (!ignoredColumn.get(i)) {
+                columnPriorities.add(i);
+            }
         }
     }
 
@@ -315,7 +333,7 @@ public class ElasticImpl {
         StyleInfo si = getStyleInfo(e);
         int span = min(si.span, nbrOfCol);
         String width;
-        if (useCalc) {
+        if (canUseCalc()) {
             double weight = (double) span / nbrOfCol;
             si.width = 100 * weight;
             double innerMarginPart = (double) (options.getInnerColumnMargin() * (nbrOfCol - 1)) * weight;
@@ -326,6 +344,7 @@ public class ElasticImpl {
         } else {
             si.width = columnWidth * span + options.getInnerColumnMargin() * (span - 1) - si.marginLeft - si
                     .marginRight;
+
             width = si.width + "px";
         }
 
@@ -352,6 +371,7 @@ public class ElasticImpl {
 
         StyleInfo styleInfo = new StyleInfo();
         styleInfo.span = getSpan(e);
+        styleInfo.rowSpanAll = "all".equals(e.getAttribute(Elastic.ROW_SPAN_ATTRIBUTE));
         styleInfo.floatColumn = floatColumn;
         styleInfo.marginRight = $e.cur("marginRight", true);
         styleInfo.marginLeft = $e.cur("marginLeft", true);

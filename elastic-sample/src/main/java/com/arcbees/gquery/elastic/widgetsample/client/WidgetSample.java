@@ -16,8 +16,6 @@
 
 package com.arcbees.gquery.elastic.widgetsample.client;
 
-import java.util.Random;
-
 import com.arcbees.gquery.elastic.client.Elastic;
 import com.arcbees.gquery.elastic.client.ElasticHtmlPanel;
 import com.google.gwt.core.client.EntryPoint;
@@ -30,6 +28,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import java.util.Random;
 
 public class WidgetSample implements EntryPoint {
     interface WidgetSampleUiBinder extends UiBinder<Widget, WidgetSample> {
