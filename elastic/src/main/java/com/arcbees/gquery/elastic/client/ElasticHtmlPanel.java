@@ -90,7 +90,7 @@ public class ElasticHtmlPanel extends HTMLPanel {
      * If you want to the width of the columns doesn't increase with the width of the container, set the
      * <code>maximumWidth</code> equals to the <code>minimumWidth</code>
      * <p/>
-     * If you want that the columns take all the available space in the container et increase their width according to
+     * If you want that the columns take all the available space in the container and increase their width according to
      * the width of the container, set the <code>maximumWidth</code> to -1.
      * <p/>
      * Default: {@value -1}

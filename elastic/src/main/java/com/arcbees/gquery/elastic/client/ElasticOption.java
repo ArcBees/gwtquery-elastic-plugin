@@ -53,12 +53,12 @@ public class ElasticOption {
 
     /**
      * Set the maximal width in px for a column. When the column width reach this value, the width of the column is not
-     * increased even if the width od the container increase.
+     * increased even if the width of the container increases.
      * <p/>
      * If you want to the width of the columns doesn't increase with the width of the container, set the
      * <code>maximumWidth</code> equals to the <code>minimumWidth</code>
      * <p/>
-     * If you want that the columns take all the available space in the container et increase their width according to
+     * If you want that the columns take all the available space in the container and increase their width according to
      * the width of the container, set the <code>maximumWidth</code> to -1.
      * <p/>
      * If the maximumColumnWidth value is be lower than the value returned by {@link #getMinimumColumnWidth()}, this
