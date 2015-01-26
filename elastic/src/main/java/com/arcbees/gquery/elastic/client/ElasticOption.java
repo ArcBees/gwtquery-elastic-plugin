@@ -17,6 +17,18 @@
 package com.arcbees.gquery.elastic.client;
 
 public class ElasticOption {
+    public static enum PlacementStrategy {
+        /**
+         * Place the items in columns by Following the order they are defined.
+         */
+        NATURAL_ORDER,
+
+        /**
+         * The items are placed in the smaller column
+         */
+        AVAILABLE_SPACE
+    }
+
     static int MINIMUM_COLUMN_DEFAULT = 1;
     static int MAXIMUM_COLUMN_WIDTH_DEFAULT = -1;
     static int MINIMUM_COLUMN_WIDTH_DEFAULT = 250;
@@ -30,6 +42,7 @@ public class ElasticOption {
     private int innerColumnMargin;
     private int innerRowMargin;
     private boolean autoResize;
+    private PlacementStrategy placementStrategy;
 
     public ElasticOption() {
         setDefaults();
@@ -140,6 +153,17 @@ public class ElasticOption {
         return this;
     }
 
+    public PlacementStrategy getPlacementStrategy() {
+        return placementStrategy;
+    }
+
+    /**
+     * Set the strategy to use for placing the element in columns.
+     */
+    public void setPlacementStrategy(PlacementStrategy placementStrategy) {
+        this.placementStrategy = placementStrategy;
+    }
+
     private void setDefaults() {
         minimumColumnWidth = MINIMUM_COLUMN_WIDTH_DEFAULT;
         maximumColumnWidth = MAXIMUM_COLUMN_WIDTH_DEFAULT;
@@ -148,5 +172,6 @@ public class ElasticOption {
         innerColumnMargin = INNER_COLUMN_MARGIN_DEFAULT;
         innerRowMargin = INNER_ROW_MARGIN_DEFAULT;
         autoResize = true;
+        placementStrategy = PlacementStrategy.AVAILABLE_SPACE;
     }
 }
