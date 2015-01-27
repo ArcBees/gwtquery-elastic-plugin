@@ -70,7 +70,7 @@
         <gwt.style>OBF</gwt.style>
         <junit.version>4.11</junit.version>
 
-        <gwt.maven.version>2.6.1</gwt.maven.version>
+        <gwt.maven.version>2.7.0</gwt.maven.version>
         <maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
         <github.version>0.9</github.version>
 
