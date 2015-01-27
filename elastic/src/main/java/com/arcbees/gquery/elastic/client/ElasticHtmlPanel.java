@@ -16,6 +16,7 @@
 
 package com.arcbees.gquery.elastic.client;
 
+import com.arcbees.gquery.elastic.client.ElasticOption.PlacementStrategy;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Command;
@@ -204,6 +205,13 @@ public class ElasticHtmlPanel extends HTMLPanel {
      */
     public void setAutoResize(boolean autoResize) {
         options.setAutoResize(autoResize);
+    }
+
+    /**
+     * Set the strategy to use for placing the element in columns.
+     */
+    public void setPlacementStrategy(PlacementStrategy placementStrategy) {
+        options.setPlacementStrategy(placementStrategy);
     }
 
     public void update() {

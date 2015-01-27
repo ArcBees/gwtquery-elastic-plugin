@@ -33,9 +33,12 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
+import static com.arcbees.gquery.elastic.client.ElasticOption.PlacementStrategy.AVAILABLE_SPACE;
 import static com.google.gwt.query.client.GQuery.$;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -100,7 +103,7 @@ public class ElasticImpl {
     private Element container;
     private LayoutCommand layoutCommand;
     // Deque interfaces not supported by gwt
-    private PriorityQueue<Integer> columnPriorities;
+    private Queue<Integer> columnPriorities;
     private List<Double> columnHeights;
     private List<Boolean> ignoredColumn;
     private boolean useTranslate3d;
@@ -119,7 +122,13 @@ public class ElasticImpl {
 
         columnHeights = new ArrayList<Double>();
         ignoredColumn = new ArrayList<Boolean>();
-        columnPriorities = new PriorityQueue<Integer>(10, new ColumnHeightComparator());
+
+        if (options.getPlacementStrategy() == AVAILABLE_SPACE) {
+            columnPriorities = new PriorityQueue<Integer>(10, new ColumnHeightComparator());
+        } else {
+            columnPriorities = new LinkedList<Integer>();
+        }
+
         useTranslate3d = CSS_TRANSLATE_3D != null;
         useCalc = CSS_CALC != null;
 
@@ -261,12 +270,28 @@ public class ElasticImpl {
             } else {
                 minHeight = Double.MAX_VALUE;
                 column = 0;
-                for (int i = 0; i <= columnHeights.size() - span; i++) {
-                    double maxHeight = getMaxHeight(i, i + span);
-                    if (maxHeight < minHeight) {
-                        column = i;
-                        minHeight = maxHeight;
+
+                if (options.getPlacementStrategy() == AVAILABLE_SPACE) {
+                    for (int i = 0; i <= columnHeights.size() - span; i++) {
+                        double maxHeight = getMaxHeight(i, i + span);
+                        if (maxHeight < minHeight) {
+                            column = i;
+                            minHeight = maxHeight;
+                        }
                     }
+                } else {
+                    column = columnPriorities.peek();
+                    if (column + span > columnHeights.size()) {
+                        // not enough remaining columns, restart from column 0
+                        for (int i = column; i < columnHeights.size(); i++) {
+                            columnPriorities.remove(i);
+                            columnPriorities.add(i);
+                        }
+                        column = 0;
+
+                    }
+
+                    minHeight = getMaxHeight(column, column + span);
                 }
             }
 
